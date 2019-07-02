@@ -466,3 +466,149 @@ const groupBy = (arr, key) => {
 };
 
 console.log(groupBy(users, "gender"));
+
+// map set
+
+const x = { a: 1, b: 2, c: 3, d: 4 };
+
+const y = [1, 2, 3, 4, 5];
+
+for (const key in x) {
+  console.log(key);
+  console.log(x[key]);
+  // if (object.hasOwnProperty(key)) {
+  //     const element = object[key];
+
+  // }
+}
+
+for (let item of y) {
+  console.log(item);
+}
+
+for (const [key, value] of Object.entries(x)) {
+  console.log(key, value);
+}
+
+const map = new Map();
+
+map.set("1", "one");
+map.set(1, "one numeric");
+
+console.log(map.size);
+
+console.log(map.get("1"));
+
+console.log(map.has(1));
+
+for (const [key, value] of map) {
+  console.log(key, value);
+}
+
+const set = new Set();
+
+set.add({ a: 1 });
+set.add({ b: 2 });
+
+// promise
+
+const prom1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("promise1 resolved");
+    // reject('promise rejected');
+  }, 1000);
+});
+
+const prom2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("promise2 resolved");
+    // reject('promise2 rejected');
+  }, 1000);
+});
+
+console.log("hello");
+
+// prom1.then(x => {
+//     console.log(x)
+// }).catch((err) => {
+//     console.log(err)
+// })
+
+const abc = async () => {
+  try {
+    // const p1  = await prom1; // 1
+    // const p2 = await prom2; // 2
+    //   const data =  await Promise.all([prom2, prom1]); // 2 sec
+    //   console.log([p1, p2]);
+    const data = await Promise.race([prom2, prom1]);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+abc();
+console.log("hello1");
+
+// generators
+
+function* xyz() {
+  yield 1;
+  yield 2;
+  yield 3;
+  yield 4;
+  return 1;
+}
+
+const gen = xyz();
+
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+// console.log(gen.next());
+
+for (const iterator of gen) {
+  console.log(iterator);
+}
+
+const add = (a, b, c, ...props) => {
+  return props.reduce((p, c) => p + c);
+};
+
+console.log(add(1, 2, 3, 4, 5, 6, 7));
+
+// const x = { a: 1, b: 2, c: 3, d: 4}
+
+// const add = ({ a,b, ...props }) => {
+//     console.log(props)
+//     return a + b;
+// }
+
+// console.log(add(x));
+
+const calc = (a, b) => {
+  return type => {
+    return type(a, b);
+  };
+};
+
+const add = (a, b) => a + b;
+const multiply = (a, b) => a * b;
+
+console.log(calc(1, 2)(multiply));
+
+const a = 1;
+const b = 2;
+
+const x = {
+  a,
+  b,
+  c() {
+    return this.a + this.b;
+  }
+};
+
+console.log(x.a);
+console.log(x.b);
+console.log(x.c());
