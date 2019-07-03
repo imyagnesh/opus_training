@@ -20,3 +20,5 @@ https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snipp
 https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets
 https://marketplace.visualstudio.com/items?itemName=WallabyJs.quokka-vscode
 https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+
+https://demos.scotch.io/visual-guide-to-css3-flexbox-flexbox-playground/demos/
