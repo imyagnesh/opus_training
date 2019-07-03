@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot snapshot of index 1`] = `
+<div
+  style={
+    Object {
+      "display": "flex",
+      "flexDirection": "column",
+      "margin": 0,
+      "padding": 0,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "alignItems": "center",
+        "display": "flex",
+        "flex": 1,
+        "flexDirection": "column",
+      }
+    }
+  >
+    <h1>
+      Todo App
+    </h1>
+    <p>
+      fetch is not defined
+    </p>
+    <todoForm
+      addTodo={[Function]}
+      changeText={[Function]}
+      todoText=""
+    />
+  </div>
+  <todoStatus
+    changeStatus={[Function]}
+    status="all"
+  />
+</div>
+`;

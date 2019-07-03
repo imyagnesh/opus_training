@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot snapshot of index 1`] = `
+<form
+  onSubmit={[MockFunction]}
+>
+  <input
+    onChange={[MockFunction]}
+    placeholder="Write your TODO here..."
+    required={true}
+    type="text"
+    value=""
+  />
+  <button
+    type="submit"
+  >
+    Add Todo
+  </button>
+</form>
+`;
