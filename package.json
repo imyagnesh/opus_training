@@ -6,7 +6,10 @@
   "author": "Yagnesh Modh <yagnesh.ash.modh@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open",
+    "lint": "eslint --debug src/",
+    "lint:write": "eslint --debug src/ --fix",
+    "prettier": "prettier --write src/**/*.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.4.5",
@@ -19,9 +22,20 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.2",
     "css-loader": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "prettier": "^1.18.2",
     "style-loader": "^0.23.1",
     "webpack": "^4.35.2",
     "webpack-cli": "^3.3.5",
