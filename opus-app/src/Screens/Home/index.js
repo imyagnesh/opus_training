@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { API } from '../../utils';
+import { LocaleConsumer } from '../../Context/localeContext';
 
-export default class index extends Component {
+class index extends Component {
   static propTypes = {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired
@@ -11,22 +14,32 @@ export default class index extends Component {
   state = {
     courses: [],
     authors: [],
-    error: false
+    error: false,
+    form: {
+      title: '',
+      watchHref: '',
+      length: '',
+      category: '',
+      authorId: ''
+    }
   };
 
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
+  //   this.loadData();
+  // }
+
+  componentDidMount() {
     this.loadData();
   }
 
   loadData = async () => {
     try {
       const res = await Promise.all([
-        fetch('http://localhost:3004/courses'),
-        fetch('http://localhost:3004/authors')
+        API({ uri: 'http://localhost:3004/courses' }),
+        API({ uri: 'http://localhost:3004/authors' })
       ]);
-      const jsonRes = await Promise.all([res[0].json(), res[1].json()]);
-      this.setState({ courses: jsonRes[0], authors: jsonRes[1] });
+      this.setState({ courses: res[0], authors: res[1] });
     } catch (error) {
       this.setState({ error });
     }
@@ -43,21 +56,54 @@ export default class index extends Component {
 
   addCourses = () => {
     const { history } = this.props;
+    const { authors, form } = this.state;
+    history.push({
+      pathname: '/details/',
+      state: {
+        authors,
+        course: form
+      }
+    });
+  };
+
+  editCourse = course => {
+    const { history } = this.props;
     const { authors } = this.state;
     history.push({
       pathname: '/details/',
       state: {
-        authors
+        authors,
+        course
       }
     });
+  };
+
+  deleteCourse = async course => {
+    try {
+      await API({ uri: `http://localhost:3004/courses/${course.id}`, method: 'DELETE' });
+      this.setState(state => {
+        return {
+          courses: state.courses.filter(x => x.id !== course.id)
+        };
+      });
+    } catch (error) {
+      this.setState({ error });
+    }
   };
 
   render() {
     const { courses, error, authors } = this.state;
     console.log(authors);
+    console.log(this.props);
     return (
       <div>
+        <LocaleConsumer>
+          {val => {
+            return <span>{val.locale}</span>;
+          }}
+        </LocaleConsumer>
         {error && <span>{error.message}</span>}
+
         <button type="button" onClick={this.addCourses}>
           Add Courses
         </button>
@@ -70,6 +116,7 @@ export default class index extends Component {
               <th>Author</th>
               <th>Length</th>
               <th>Category</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -82,6 +129,14 @@ export default class index extends Component {
                 <td>{this.getAuthor(course.authorId)}</td>
                 <td>{course.length}</td>
                 <td>{course.category}</td>
+                <td>
+                  <button type="button" onClick={() => this.editCourse(course)}>
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => this.deleteCourse(course)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -90,3 +145,20 @@ export default class index extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    courses: state.courses
+  };
+}
+
+function mapDispatchToProps() {
+  return {
+    // actions: bindActionCreators(PropertiesActions, dispatch)
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(index);

@@ -5,13 +5,14 @@ import { Formik, Field } from 'formik';
 const Form = ({ fields, btnText, ...props }) => {
   return (
     <Formik {...props}>
-      {({ handleSubmit, isSubmitting }) => (
+      {({ handleSubmit, isSubmitting, errors }) => (
         <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
-          {fields.map(x => (
-            <Field key={x.id} {...x} />
-          ))}
+          {errors.general && <span>{errors.general}</span>}
+          {fields.map(x => {
+            return <Field key={x.id} {...x} />;
+          })}
           <button type="submit" disabled={isSubmitting}>
-            {btnText}
+            {isSubmitting ? 'Adding Course....' : 'Add Course'}
           </button>
         </form>
       )}
@@ -25,3 +26,10 @@ Form.propTypes = {
 };
 
 export default Form;
+
+/* if (x.reference) {
+  if (x.reference && values[x.reference]) {
+    return <Field key={x.id} {...x} />;
+  }
+  return null;
+} */

@@ -1,23 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
+
 import TextBox from '../../Components/textBox';
 import Select from '../../Components/dropdown';
 import Form from '../../Components/form';
-
-const validateCourses = Yup.object().shape({
-  title: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  watchHref: Yup.string()
-    .min(2, 'Too Short!')
-    .max(200, 'Too Long!')
-    .required('Required'),
-  length: Yup.string().required('Required'),
-  category: Yup.string().required('Required'),
-  authorId: Yup.string().required('Required')
-});
+import { API } from '../../utils';
+import validateCourses from './validation';
 
 export default class index extends Component {
   static propTypes = {
@@ -35,13 +23,6 @@ export default class index extends Component {
       label: `${x.firstName} ${x.lastName}`
     }));
     this.state = {
-      form: {
-        title: '',
-        watchHref: '',
-        length: '',
-        category: '',
-        authorId: ''
-      },
       courseForm: {
         fields: [
           {
@@ -75,22 +56,64 @@ export default class index extends Component {
             placeholder: 'Author',
             options: [{ value: '', label: 'Select Author' }, ...authorsOptions]
           }
+          // {
+          //   id: 6,
+          //   name: 'country',
+          //   component: Select,
+          //   placeholder: 'Country',
+          //   options: [
+          //     { val: '', label: 'Select Country' },
+          //     { value: 'in', label: 'india' },
+          //     { value: 'us', label: 'United-State' }
+          //   ]
+          // },
+          // {
+          //   id: 7,
+          //   name: 'state',
+          //   component: Select,
+          //   placeholder: 'State',
+          //   reference: 'country',
+          //   options: [{ value: 'gj', label: 'Gujarat' }, { value: 'mh', label: 'maharastra' }]
+          // }
         ],
         validation: validateCourses
       }
     };
   }
 
-  submitForm = values => {
-    console.log(values);
+  submitForm = async (values, actions) => {
+    try {
+      // throw new Error('Username or password is wrong!');
+      let uri = 'http://localhost:3004/courses';
+      if (values.id) {
+        uri = `http://localhost:3004/courses/${values.id}`;
+      }
+      const course = await API({
+        uri,
+        method: values.id ? 'PUT' : 'POST',
+        body: values
+      });
+      console.log(course);
+      actions.resetForm();
+      const { history } = this.props;
+      history.goBack();
+    } catch (error) {
+      actions.setErrors({ general: error.message });
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   render() {
-    const { form, courseForm } = this.state;
-
+    const { courseForm } = this.state;
+    const {
+      location: {
+        state: { course }
+      }
+    } = this.props;
     return (
       <Form
-        initialValues={form}
+        initialValues={course}
         onSubmit={this.submitForm}
         validationSchema={courseForm.validation}
         fields={courseForm.fields}
