@@ -3,18 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { API } from '../../utils';
 import { LocaleConsumer } from '../../Context/localeContext';
+import * as types from '../../Constants/actionTypes';
 
 class index extends Component {
   static propTypes = {
     history: PropTypes.shape({
       push: PropTypes.func.isRequired
-    }).isRequired
+    }).isRequired,
+    loadCourses: PropTypes.func.isRequired,
+    loadAuthors: PropTypes.func.isRequired,
+    authors: PropTypes.array.isRequired,
+    courses: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.bool.isRequired
   };
 
   state = {
-    courses: [],
-    authors: [],
-    error: false,
     form: {
       title: '',
       watchHref: '',
@@ -24,29 +28,14 @@ class index extends Component {
     }
   };
 
-  // constructor(props) {
-  //   super(props);
-  //   this.loadData();
-  // }
-
-  componentDidMount() {
-    this.loadData();
+  constructor(props) {
+    super(props);
+    props.loadCourses();
+    props.loadAuthors();
   }
 
-  loadData = async () => {
-    try {
-      const res = await Promise.all([
-        API({ uri: 'http://localhost:3004/courses' }),
-        API({ uri: 'http://localhost:3004/authors' })
-      ]);
-      this.setState({ courses: res[0], authors: res[1] });
-    } catch (error) {
-      this.setState({ error });
-    }
-  };
-
   getAuthor = id => {
-    const { authors } = this.state;
+    const { authors } = this.props;
     const author = authors.find(x => x.id === id);
     if (author) {
       return `${author.firstName} ${author.lastName}`;
@@ -55,8 +44,9 @@ class index extends Component {
   };
 
   addCourses = () => {
-    const { history } = this.props;
-    const { authors, form } = this.state;
+    const { history, authors } = this.props;
+    console.log(authors);
+    const { form } = this.state;
     history.push({
       pathname: '/details/',
       state: {
@@ -67,8 +57,7 @@ class index extends Component {
   };
 
   editCourse = course => {
-    const { history } = this.props;
-    const { authors } = this.state;
+    const { history, authors } = this.props;
     history.push({
       pathname: '/details/',
       state: {
@@ -87,14 +76,22 @@ class index extends Component {
         };
       });
     } catch (error) {
-      this.setState({ error });
+      // this.setState({ error });
     }
   };
 
   render() {
-    const { courses, error, authors } = this.state;
+    const { courses, authors, loading, error } = this.props;
     console.log(authors);
     console.log(this.props);
+    if (loading) {
+      return <p>Loading...</p>;
+    }
+
+    if (error) {
+      return <p>Oops! something went wrong!!</p>;
+    }
+
     return (
       <div>
         <LocaleConsumer>
@@ -102,7 +99,6 @@ class index extends Component {
             return <span>{val.locale}</span>;
           }}
         </LocaleConsumer>
-        {error && <span>{error.message}</span>}
 
         <button type="button" onClick={this.addCourses}>
           Add Courses
@@ -148,13 +144,17 @@ class index extends Component {
 
 function mapStateToProps(state) {
   return {
-    courses: state.courses
+    loading: state.courses.loading || state.authors.loading,
+    error: !!state.courses.error || !!state.authors.error,
+    courses: state.courses.data,
+    authors: state.authors.data
   };
 }
 
-function mapDispatchToProps() {
+function mapDispatchToProps(dispatch) {
   return {
-    // actions: bindActionCreators(PropertiesActions, dispatch)
+    loadCourses: () => dispatch({ type: `${types.LOAD_COURSES}_${types.REQUEST}` }),
+    loadAuthors: () => dispatch({ type: `${types.LOAD_AUTHORS}_${types.REQUEST}` })
   };
 }
 
