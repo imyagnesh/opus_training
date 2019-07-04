@@ -1,5 +1,6 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
 
 const privateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   return (
@@ -11,7 +12,8 @@ const privateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
         ) : (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: '/',
+              // eslint-disable-next-line react/prop-types
               state: { from: props.location }
             }}
           />
@@ -19,6 +21,11 @@ const privateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
       }
     />
   );
+};
+
+privateRoute.propTypes = {
+  component: PropTypes.element.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 export default privateRoute;

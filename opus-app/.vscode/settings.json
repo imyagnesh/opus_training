@@ -1,0 +1,33 @@
+{
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/.vscode": true,
+    "**/node_modules": true
+  },
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "git.ignoreLimitWarning": true,
+  "cSpell.words": [
+    "Exts",
+    "Formik",
+    "horiz",
+    "nesthawk",
+    "netinfo",
+    "overline",
+    "precommit",
+    "supercluster"
+  ],
+  "[javascript]": { "editor.formatOnSave": true },
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "prettier.eslintIntegration": true,
+  "telemetry.enableTelemetry": false,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "vue-html": "html"
+  }
+}

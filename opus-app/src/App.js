@@ -5,7 +5,7 @@ import {
   Switch,
   NavLink
 } from "react-router-dom";
-import PrivateRoute from "./Components/privateRoute";
+// import PrivateRoute from "./Components/privateRoute";
 import routes from "./route";
 
 function AppRouter() {
