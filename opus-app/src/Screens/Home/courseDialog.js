@@ -20,11 +20,7 @@ class courseDialog extends Component {
             id: 1,
             name: 'title',
             component: TextBox,
-            placeholder: 'Title',
-            containerStyle: { backgroundColor: 'red' },
-            type: 'password',
-            style: { width: 200 },
-            errorRender: err => <div style={{ backgroundColor: 'blue', color: 'green' }}>{err}</div>
+            placeholder: 'Title'
           },
           {
             id: 2,
