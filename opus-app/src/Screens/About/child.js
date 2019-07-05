@@ -1,19 +1,23 @@
-import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 
-const child = ({ user }) => {
-  console.log('child re-render');
-  return (
-    <div>
-      <h1>Child Component</h1>
-      <p>{`Name: ${user.name}`}</p>
-      <p>{`Gender: ${user.gender}`}</p>
-    </div>
-  );
-};
+export default class child extends PureComponent {
+  static propTypes = {
+    user: PropTypes.object.isRequired
+  };
 
-child.propTypes = {
-  user: PropTypes.object.isRequired
-};
+  getData = () => {
+    return 'yagnesh';
+  };
 
-export default memo(child);
+  render() {
+    const { user } = this.props;
+    return (
+      <div>
+        <h1>Child Component</h1>
+        <p>{`Name: ${user.name}`}</p>
+        <p>{`Gender: ${user.gender}`}</p>
+      </div>
+    );
+  }
+}

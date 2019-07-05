@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default WrappedComponent => {
-  const hocComponent = ({ ...props }) => <WrappedComponent {...props} />;
+class testHOC extends Component {
+  static propTypes = {
+    children: PropTypes.element.isRequired
+  };
 
-  hocComponent.propTypes = {};
+  state = {};
 
-  return hocComponent;
-};
+  render() {
+    const { children } = this.props;
+
+    return (
+      <div>
+        <lable>Hello from testHOC</lable>
+        {children}
+      </div>
+    );
+  }
+}
+
+testHOC.propTypes = {};
+
+export default testHOC;

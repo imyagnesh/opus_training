@@ -1,22 +1,5 @@
 {
-  "courses": [
-    {
-      "title": "redux course",
-      "watchHref": "http://www.pluralsight.com/courses/react-flux-building-applications",
-      "length": "5:08",
-      "category": "Career option",
-      "authorId": "cory-house",
-      "id": "UbCKl9Q"
-    },
-    {
-      "title": "title",
-      "watchHref": "http://www.pluralsight.com/courses/react-flux-building-applications",
-      "length": "5:08",
-      "category": "react",
-      "authorId": "cory-house",
-      "id": "jGe0u1x"
-    }
-  ],
+  "courses": [],
   "authors": [
     {
       "id": "cory-house",
