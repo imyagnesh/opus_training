@@ -1,6 +1,6 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects';
+import { API } from 'utils';
 import * as types from '../Constants/actionTypes';
-import { API } from '../utils';
 
 export function* loadAuthors() {
   try {

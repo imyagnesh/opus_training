@@ -1,21 +1,20 @@
 import * as types from '../Constants/actionTypes';
 
-const initialState = {
-  loading: false,
-  data: [],
-  error: false
-};
-
-export default (state = initialState, { type, payload }) => {
+export default (state = [], { type, payload }) => {
   switch (type) {
-    case `${types.LOAD_COURSES}_${types.REQUEST}`:
-      return { ...state, loading: true };
-
     case `${types.LOAD_COURSES}_${types.SUCCESS}`:
-      return { ...state, loading: false, data: payload };
+      return payload;
 
-    case `${types.LOAD_COURSES}_${types.FAILURE}`:
-      return { ...state, loading: false, error: payload };
+    case `${types.ADD_COURSE}_${types.SUCCESS}`:
+      return [...state, payload];
+
+    case `${types.EDIT_COURSE}_${types.SUCCESS}`: {
+      const index = state.findIndex(x => x.id === payload.id);
+      return [...state.slice(0, index), payload, ...state.slice(index + 1)];
+    }
+
+    case `${types.DELETE_COURSE}_${types.SUCCESS}`:
+      return state.filter(x => x.id !== payload);
 
     default:
       return state;

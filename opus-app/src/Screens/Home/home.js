@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { API } from '../../utils';
-import { LocaleConsumer } from '../../Context/localeContext';
+import List from './list';
+import CourseDialog from './courseDialog';
+
+const initialVal = {
+  title: '',
+  watchHref: '',
+  length: '',
+  category: '',
+  authorId: ''
+};
 
 class index extends Component {
   static propTypes = {
@@ -13,17 +21,15 @@ class index extends Component {
     authors: PropTypes.array.isRequired,
     courses: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
-    error: PropTypes.bool.isRequired
+    error: PropTypes.object.isRequired,
+    addCourse: PropTypes.func.isRequired,
+    editCourse: PropTypes.func.isRequired,
+    deleteCourses: PropTypes.func.isRequired
   };
 
   state = {
-    form: {
-      title: '',
-      watchHref: '',
-      length: '',
-      category: '',
-      authorId: ''
-    }
+    form: null,
+    open: false
   };
 
   constructor(props) {
@@ -32,109 +38,59 @@ class index extends Component {
     props.loadAuthors();
   }
 
-  getAuthor = id => {
-    const { authors } = this.props;
-    const author = authors.find(x => x.id === id);
-    if (author) {
-      return `${author.firstName} ${author.lastName}`;
-    }
-    return '';
-  };
-
-  addCourses = () => {
-    const { history, authors } = this.props;
-    console.log(authors);
-    const { form } = this.state;
-    history.push({
-      pathname: '/details/',
-      state: {
-        authors,
-        course: form
-      }
+  toggleDialog = () => {
+    this.setState(state => {
+      return { open: !state.open };
     });
-  };
-
-  editCourse = course => {
-    const { history, authors } = this.props;
-    history.push({
-      pathname: '/details/',
-      state: {
-        authors,
-        course
-      }
-    });
-  };
-
-  deleteCourse = async course => {
-    try {
-      await API({ uri: `http://localhost:3004/courses/${course.id}`, method: 'DELETE' });
-      this.setState(state => {
-        return {
-          courses: state.courses.filter(x => x.id !== course.id)
-        };
-      });
-    } catch (error) {
-      // this.setState({ error });
-    }
   };
 
   render() {
-    const { courses, authors, loading, error } = this.props;
-    console.log(authors);
-    console.log(this.props);
+    const { courses, authors, loading, error, addCourse, editCourse, deleteCourses } = this.props;
+    const { open, form } = this.state;
+
     if (loading) {
       return <p>Loading...</p>;
     }
 
     if (error) {
-      return <p>Oops! something went wrong!!</p>;
+      return <p>{error.message}</p>;
     }
 
     return (
       <div>
-        <LocaleConsumer>
-          {val => {
-            return <span>{val.locale}</span>;
+        <button
+          type="button"
+          onClick={() => {
+            this.setState({ form: initialVal });
+            this.toggleDialog();
           }}
-        </LocaleConsumer>
-
-        <button type="button" onClick={this.addCourses}>
+        >
           Add Courses
         </button>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Link</th>
-              <th>Author</th>
-              <th>Length</th>
-              <th>Category</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map(course => (
-              <tr key={course.id}>
-                <td>{course.title}</td>
-                <td>
-                  <a href={course.watchHref}>Link</a>
-                </td>
-                <td>{this.getAuthor(course.authorId)}</td>
-                <td>{course.length}</td>
-                <td>{course.category}</td>
-                <td>
-                  <button type="button" onClick={() => this.editCourse(course)}>
-                    Edit
-                  </button>
-                  <button type="button" onClick={() => this.deleteCourse(course)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <List
+          courses={courses}
+          authors={authors}
+          editCourse={course => {
+            this.setState({ form: course });
+            this.toggleDialog();
+          }}
+          deleteCourse={deleteCourses}
+        />
+        {form && open && (
+          <CourseDialog
+            open={open}
+            initialValues={form}
+            authors={authors}
+            submitForm={(values, actions) => {
+              if (values.id) {
+                editCourse(values, actions);
+              } else {
+                addCourse(values, actions);
+              }
+              this.toggleDialog();
+            }}
+          />
+        )}
       </div>
     );
   }

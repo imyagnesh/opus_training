@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { API } from 'utils';
 import TextBox from '../../Components/textBox';
 import Select from '../../Components/dropdown';
 import Form from '../../Components/form';
-import { API } from '../../utils';
 import validateCourses from './validation';
 
 export default class index extends Component {
@@ -56,25 +56,6 @@ export default class index extends Component {
             placeholder: 'Author',
             options: [{ value: '', label: 'Select Author' }, ...authorsOptions]
           }
-          // {
-          //   id: 6,
-          //   name: 'country',
-          //   component: Select,
-          //   placeholder: 'Country',
-          //   options: [
-          //     { val: '', label: 'Select Country' },
-          //     { value: 'in', label: 'india' },
-          //     { value: 'us', label: 'United-State' }
-          //   ]
-          // },
-          // {
-          //   id: 7,
-          //   name: 'state',
-          //   component: Select,
-          //   placeholder: 'State',
-          //   reference: 'country',
-          //   options: [{ value: 'gj', label: 'Gujarat' }, { value: 'mh', label: 'maharastra' }]
-          // }
         ],
         validation: validateCourses
       }
